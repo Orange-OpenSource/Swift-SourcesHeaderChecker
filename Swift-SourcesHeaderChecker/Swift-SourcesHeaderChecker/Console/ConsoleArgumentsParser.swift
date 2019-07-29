@@ -40,12 +40,13 @@ struct ConsoleArgumentsParser {
                 ||
                 (params.count == 1 && params[0].0 == .version)
                 ||
-                (params.count == 2 && (
+                (params.count == 3 && (
+                    // TODO Use closures on the array to filter and count entries of tuples
                     (params[0].0 == .folderToProcess && params[1].0 == .headerContent) ||
                         (params[0].0 == .headerContent && params[1].0 == .folderToProcess)
                     ))
                 ||
-                (params.count == 3 && isVerboseDefined(in: params)) // FIXME Not efficient, missing cases
+                (params.count == 4 && isVerboseDefined(in: params)) // FIXME Not efficient, missing cases
     }
     
     /// Returns true if the option is for help message to display or false otherwise
