@@ -40,7 +40,7 @@ EXECUTABLE --folder FOLDER --header FILE_CONTENT
 You can also make the program display more messages with the verbose option:
 
 ```shell
-EXECUTABLE --folder FOLDER --mention FILE_CONTENT --verbose
+EXECUTABLE --folder FOLDER --header FILE_CONTENT --verbose
 ```
 
 
