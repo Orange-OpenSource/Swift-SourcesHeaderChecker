@@ -28,7 +28,7 @@ import Foundation
 /// leagal mentions in the header.
 ///
 /// - Author: Pierre-Yves Lapersonne
-/// - Version: 1.0.0
+/// - Version: 2.0.0
 /// - Since: 01/07/2019
 ///
 struct HeaderVerifier {
@@ -72,8 +72,8 @@ struct HeaderVerifier {
     /// Will consider as suitable a file which has its header matching the following conditions:
     /// 1 - no hashbang in first line (because of 3)
     /// 2 - no import in first line (because of 3)
-    /// 3 - starts with /** or /*
-    /// 4 - has */ ending the header
+    /// 3 - starts with /** or /* or //
+    /// 4 - has */ ending the header or //
     ///
     /// - Parameters:
     ///     - at: The path to the source file which should contain the expected header
@@ -90,9 +90,9 @@ struct HeaderVerifier {
             return false
         }
 
-        // Check if the line starts by /** or //
-        if !currentFileContent.starts(with: "/**") && !currentFileContent.starts(with: "/*") {
-            output.write("⚠️  It seems the Swift file at (\(path)) does not start with '/**' or '/*'. Will reject it.")
+        // Check if the line starts by /**, /* or //
+        if !currentFileContent.isCommentLine() {
+            output.write("⚠️  It seems the Swift file at (\(path)) does not start with '/**' or '/*' or '//'. Will reject it.")
             return false
         }
         
@@ -101,6 +101,7 @@ struct HeaderVerifier {
         let splittedFileContent = currentFileContent.linesUntil(k: mention.linesCount + 2) // Keep */
         let splittedMention = mention.lines
         for i in 0..<mention.linesCount {
+            // TODO Deal with case where the name of the file is in the header -_-
             let cleanedMentionLine = splittedMention[i].clear()
             let cleanedFileContentLine = splittedFileContent[i+1].clear()
             if cleanedMentionLine != cleanedFileContentLine {
@@ -111,6 +112,7 @@ struct HeaderVerifier {
             }
         }
         
+        // TODO: Deal with end by //
         if splittedFileContent.last?.clear() != "*/" {
             output.write("⚠️  It seems this Swift file (\(path)) has its header closed by another symbol than */")
         }

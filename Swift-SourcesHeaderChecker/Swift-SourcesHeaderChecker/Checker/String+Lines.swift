@@ -26,8 +26,9 @@ import Foundation
 /// Extension of the String legacy obejcts adding to it useful methods for lines processing
 ///
 /// - Author: Pierre-Yves Lapersonne
-/// - Version: 1.0.0
+/// - Version: 1.1.0
 /// - Since: 01/07/2019
+///
 extension String {
  
     /// The array of lines of the string, using the newlines characters to split it
@@ -61,8 +62,19 @@ extension String {
     /// - Returns:
     ///     - The updated value of the current string
     ///
-    func clear(of values: String = " \n\t\r") -> String {
+    func clear(of values: String = " \n\t\r//") -> String {
         return self.filter { !values.contains($0) }
+    }
+    
+    /// Checks if the String can be consiedered as a comment line, i.e. starts
+    /// with special symbols like '/**', '/*' or '//'
+    /// - Returns:
+    ///     - True if starts with such symbols, false otherwise
+    ///
+    func isCommentLine() -> Bool {
+        return self.starts(with: "/**")
+        || self.starts(with: "/*")
+        || self.starts(with: "//")
     }
     
 }
