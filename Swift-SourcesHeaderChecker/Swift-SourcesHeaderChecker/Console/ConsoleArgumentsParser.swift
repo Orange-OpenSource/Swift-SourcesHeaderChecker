@@ -35,17 +35,31 @@ struct ConsoleArgumentsParser {
     /// - Returns: A flag indicating of parameters canot be used (false) or can be (true)
     ///
     func areWellDefined(arguments params: [(ConsoleArgumentTypes, String)]) -> Bool {
-        return
-            (params.count == 1 && params[0].0 == .help)
-                ||
-                (params.count == 1 && params[0].0 == .version)
-                ||
-                (params.count == 2 && (
-                    (params[0].0 == .folderToProcess && params[1].0 == .headerContent) ||
-                        (params[0].0 == .headerContent && params[1].0 == .folderToProcess)
-                    ))
-                ||
-                (params.count == 3 && isVerboseDefined(in: params)) // FIXME Not efficient, missing cases
+        
+        if isForHelp(arguments: params) {
+            return true
+        }
+        
+        if isForVersion(arguments: params) {
+            return true
+        }
+        
+        if params.count != 3 && params.count != 4 {
+            return false
+        }
+        
+        if !(isDefined(.folderToProcess, in: params)
+            && isDefined(.headerContent, in: params)
+            && isDefined(.ignoringLines, in: params)) {
+            return false
+        }
+        
+        if params.count == 4 && !isDefined(.verbose, in: params) {
+            return false
+        }
+        
+        return true
+
     }
     
     /// Returns true if the option is for help message to display or false otherwise
@@ -62,11 +76,15 @@ struct ConsoleArgumentsParser {
         return (params.count == 1 && params[0].0 == .version)
     }
     
-    /// Returns true if there is an option for the verbose mode or not (false)
+    /// Return if there is a defined option in the arguments (true) or not (false)
+    /// - Parameters:
+    ///     - option: The option to look for
+    ///     - arguments: The bundle of arguments to parse
     /// - Returns: A boolean value
     ///
-    func isVerboseDefined(in arguments: [(ConsoleArgumentTypes, String)]) -> Bool {
-        return arguments.filter { $0.0 == .verbose }.count == 1
+    func isDefined(_ option: ConsoleArgumentTypes, in arguments: [(ConsoleArgumentTypes, String)])
+        -> Bool {
+        return arguments.filter { $0.0 == option }.count == 1
     }
     
 }

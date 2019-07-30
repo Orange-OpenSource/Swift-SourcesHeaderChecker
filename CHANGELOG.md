@@ -6,3 +6,9 @@
 - Looks for Swift (.swift) files
 - Compare their header with the content of a file containing the legal mentions
 
+## Version 2.0.0
+
+- More details in documentation
+- Deal with headers starting with //
+- Can ignore some lines in the files to process (e.g. when there is some noice like file name)
+- Can be more rough and triggers warnings instead of errors if a file is not compliant with the notice
