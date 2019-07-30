@@ -26,7 +26,7 @@ import Foundation
 /// Structure to use so as to write in output channels some messages
 ///
 /// - Author: Pierre-Yves Lapersonne
-/// - Version: 1.0.0
+/// - Version: 2.0.0
 /// - Since: 01/07/2019
 ///
 struct ConsoleOutput {
@@ -54,9 +54,10 @@ struct ConsoleOutput {
     func printUsage() {
         let executableName = (CommandLine.arguments[0] as NSString).lastPathComponent
         write("Usage:")
-        write("\t\(executableName) --folder path --header content [--verbose]")
+        write("\t\(executableName) --folder path --header content --ignoring lines [--verbose]")
         write("\t\t - path: The path to the root folder containing the source files to process")
         write("\t\t - content: The path to the file containing the header content to look for, raw string, without any glue like /** /// <!--")
+        write("\t\t - lines: The numbers of line to ignore at the beginning of the file to process (0 = do not ignore lines)")
         write("or")
         write("\t\(executableName) --help")
         write("\t\t To display this help message")
@@ -109,13 +110,13 @@ struct ConsoleOutput {
 /// Structure to use so as to read console entries or arguments
 ///
 /// - Author: Pierre-Yves Lapersonne
-/// - Version: 1.0.0
+/// - Version: 2.0.0
 /// - Since: 01/07/2019
 ///
 struct ConsoleInput {
     
     /// Process the bundle of arguments given to the program and check their values.
-    /// Arguments must be a 5-length array or a 2-length array.
+    /// Arguments must be a 7-length array or a 2-length array.
     /// Item 0 of this array is the program name, other elements are the parameters.
     ///
     /// - Parameters:
@@ -135,7 +136,7 @@ struct ConsoleInput {
             return [(ConsoleArgumentTypes.version, "")]
         }
         
-        let expectedMinimalNumberOfArguments = 5
+        let expectedMinimalNumberOfArguments = 7
         if argsCount != expectedMinimalNumberOfArguments
             && argsCount != (expectedMinimalNumberOfArguments + 1){ // + 1 -> maybe add of --verbose
             return [(ConsoleArgumentTypes.undefined, "")]
