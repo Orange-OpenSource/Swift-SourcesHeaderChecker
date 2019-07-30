@@ -71,6 +71,41 @@ Maybe integration with Cocoapods or Fastlane.
 Feel free to make pull requests :)
 
 
+## Exit codes
+
+The program returns a value indicating if a problem occured or not:
+
+* (-1): something wrong occured (command line options for example)
+* (0): no error appeared, normal exit without file processing (e.g. display help)
+* (+1): normal exit but failure occured during check of files (i.e. at least 1 file does not have legal notice header)
+* (+2): normal exit, all source files contain the legal notices
+
+
+## Xcode integration
+
+You can use this tool with an Xcode build script. The following sample can be placed in a script to add to your Xcode configuration. Thus the tool (with binary in the project) can be used easily.
+
+```shell
+#!/bin/sh
+TOOL_PATH="path/to/binary/of/this/tool"
+TARGET_FOLDER="."
+HEADER_TEMPLATE="./LICENSE.txt"
+IGNORE=2
+EXCLUSIONS="path/to/exclusion/file.txt"
+
+$TOOL_PATH --folder "$TARGET_FOLDER" --header "$HEADER_TEMPLATE" --ignoring "$IGNORE" --exclude "$EXCLUSIONS"
+result=$?
+
+if [ $result -eq 2 ]
+then
+	echo "✅ All source files contain legal notice."
+	exit 0
+else
+	echo "🔴 Something wrong occured, see logs for further details."
+	exit 1
+fi
+```
+
 ## Who uses it?
 
 * Baah box project (Orange SA) - iOS app: https://github.com/Orange-OpenSource/BaahBox-iOS
