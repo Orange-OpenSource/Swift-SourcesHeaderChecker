@@ -27,7 +27,7 @@ import Foundation
 /// contain the header.
 ///
 /// - Author: Pierre-Yves Lapersonne
-/// - Version: 1.0.0
+/// - Version: 2.0.0
 /// - Since: 01/07/2019
 ///
 struct SourcesHeaderChecker {
@@ -56,19 +56,21 @@ struct SourcesHeaderChecker {
     /// for these files if they have in their top the header with legal mentions.
     /// - Parameters:
     ///     - folder: The target folder to start looking
-    ///     - notice - The notice/header to look for
+    ///     - notice: The notice/header to look for
+    ///     - ignoring: The number of lines to ignore starting from the top of the processed file
     /// - Returns:
     ///     - A flag indicating if at least one file does not contain the suitable header (false) or if
     /// all the files are suitable (true)
     ///
-    func lookIn(folder target: String, for notice: String) -> Bool {
+    func lookIn(folder target: String, for notice: String, ignoring lines: Int) -> Bool {
         
         // Get files to verify
         // FIXME: May be quite heavy for too big projects
         let matchingRessources = FolderCrawler().crawlIn(folder: target, filtering: ressourcesFilter)
         
         // Make the controls
-        let areAllResourcesSuitable = HeaderVerifier().look(at: matchingRessources, for: notice)
+        let areAllResourcesSuitable = HeaderVerifier()
+            .look(at: matchingRessources, for: notice, ignoring: lines)
         
         return areAllResourcesSuitable
         

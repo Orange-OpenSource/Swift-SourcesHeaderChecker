@@ -102,19 +102,20 @@ if !FileManager.default.fileExists(atPath: headerContentFile) {
     exit(-1)
 }
 
-let ignoreLines = Int(parameters.filter { $0.0 == .ignoringLines }[0].1) ?? -1
-
-if ignoreLines == -1 {
-    consoleWritter.write("The number of liens to ignore is not well defined. Must be a positive or nul integer", to: .error)
-    exit(-1)
-}
-
 var headerContent = ""
+
 do {
     headerContent = try String(contentsOf: URL(fileURLWithPath: headerContentFile), encoding: .utf8)
 } catch let error {
     ConsoleOutput().write("Something bad occured during header file read: \(error.localizedDescription)",
         to: .error)
+    exit(-1)
+}
+
+let ignoreLines = Int(parameters.filter { $0.0 == .ignoringLines }[0].1) ?? -1
+
+if ignoreLines == -1 {
+    consoleWritter.write("The number of liens to ignore is not well defined. Must be a positive or nul integer", to: .error)
     exit(-1)
 }
 
@@ -124,7 +125,8 @@ consoleWritter.write("""
 Will look in folder '\(folderToProcess)' for mention in file '\(headerContentFile)' ignoring '\(ignoreLines)' lines
 """, to: .standard)
 
-let areAllResourcesSuitable = SourcesHeaderChecker("swift").lookIn(folder: folderToProcess, for: headerContent)
+let areAllResourcesSuitable = SourcesHeaderChecker("swift")
+    .lookIn(folder: folderToProcess, for: headerContent, ignoring: ignoreLines)
 
 // Mark: - Check of results
 
