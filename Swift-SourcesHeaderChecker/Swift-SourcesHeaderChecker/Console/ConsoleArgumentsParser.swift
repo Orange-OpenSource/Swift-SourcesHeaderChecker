@@ -44,7 +44,7 @@ struct ConsoleArgumentsParser {
             return true
         }
         
-        if params.count != 3 && params.count != 4 {
+        if params.count < 3 || params.count > 5 {
             return false
         }
         
@@ -54,7 +54,8 @@ struct ConsoleArgumentsParser {
             return false
         }
         
-        if params.count == 4 && !isDefined(.verbose, in: params) {
+        if (params.count == 4 || params.count == 5)
+            && (!isDefined(.verbose, in: params) && !isDefined(.excludingFiles, in: params)) {
             return false
         }
         

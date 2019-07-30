@@ -53,17 +53,21 @@ struct ConsoleOutput {
     ///
     func printUsage() {
         let executableName = (CommandLine.arguments[0] as NSString).lastPathComponent
-        write("Usage:")
-        write("\t\(executableName) --folder path --header content --ignoring lines [--verbose]")
-        write("\t\t - path: The path to the root folder containing the source files to process")
-        write("\t\t - content: The path to the file containing the header content to look for, raw string, without any glue like /** /// <!--")
-        write("\t\t - lines: The numbers of line to ignore at the beginning of the file to process (0 = do not ignore lines)")
-        write("or")
-        write("\t\(executableName) --help")
-        write("\t\t To display this help message")
-        write("or")
-        write("\t\(executableName) --version")
-        write("\t\t To display the version of the program")
+        let usage = """
+        Usage:
+        \t\(executableName) --folder path --header content --ignoring lines [--excluding list] [--verbose]
+        \t\t - path: The path to the root folder containing the source files to process
+        \t\t - content: The path to the file containing the header content to look for, raw string, without any glue like /** /// <!--
+        \t\t - lines: The numbers of line to ignore at the beginning of the file to process (0 = do not ignore lines)
+        \t\t - list: THe path of a text file containing on each line the path to a file to exclude from the program, i.e. to not read and process
+        or
+        \t\(executableName) --help
+        \t\t To display this help message
+        or
+        \t\(executableName) --version
+        \t\t To display the version of the program
+        """
+        write(usage)
     }
     
     /// Displays in the standard output the version of the program
@@ -138,7 +142,8 @@ struct ConsoleInput {
         
         let expectedMinimalNumberOfArguments = 7
         if argsCount != expectedMinimalNumberOfArguments
-            && argsCount != (expectedMinimalNumberOfArguments + 1){ // + 1 -> maybe add of --verbose
+             // + 1 -> maybe add of --verbose and --excluding list
+            && argsCount != (expectedMinimalNumberOfArguments + 3){
             return [(ConsoleArgumentTypes.undefined, "")]
         }
         
