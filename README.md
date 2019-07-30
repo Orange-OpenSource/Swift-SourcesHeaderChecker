@@ -7,7 +7,7 @@ This program can be used so as to be sure the sources contain the notices like c
 ## Managed files
 
 This current version deals only with Swift file (with .swift extensions).
-In assertions, we will assume the legal notice started with "/*" or "/*\*" and ends with "\*/".
+In assertions, we will assume the legal notice started with "/*", "/*\*"  or "//" and ends with "\*/" or "//".
 
 
 ## Executables
@@ -31,34 +31,34 @@ To get the version of the program:
 EXECUTABLE --version
 ```
 
-To run the program where it have to find recursively in FOLDER the source files to check if they contain headers defined in FILE_CONTENT (path to the plain text file):
+To run the program where it have to find recursively in FOLDER the source files to check if they contain headers defined in FILE_CONTENT (path to the plain text file) ignoring first LINES lines:
 
 ```shell
-EXECUTABLE --folder FOLDER --header FILE_CONTENT
+EXECUTABLE --folder FOLDER --header FILE_CONTENT --ignoring LINES
 ```
 
 You can also make the program display more messages with the verbose option:
 
 ```shell
-EXECUTABLE --folder FOLDER --header FILE_CONTENT --verbose
+EXECUTABLE --folder FOLDER --header FILE_CONTENT --ignoring LINES --verbose
 ```
 
 
 ## Example
 
-Running the program _Swift-SourcesHeaderChecker_ starting from folder at _src_ looking for header defined in the _LICENSE.txt_:
+Running the program _Swift-SourcesHeaderChecker_ starting from folder at _src_ looking for header defined in the _LICENSE.txt_, ignoring first 2 lines because they contain some noise (e.g. file name):
 
 ```shell
-Swift-SourcesHeaderChecker --folder "./src" --header "./LICENSE.txt"
+Swift-SourcesHeaderChecker --folder "./src" --header "./LICENSE.txt" --ignoring 2
 ```
 
 
 ## What is done
 
 Basically the program deals only with Swift files.  
-For each .swift file in the target folder, will keep as much lines as these defined in the mention file.
-Will check if the header starts by /** or /* and end with \*/.
-To make easier the comparison, removes " ", "\n", "\r", "\t" symbols for each line to compare but will keep empty lines.
+For each .swift file in the target folder, will keep as much lines as these defined in the mention file and may get rid of some lines to ignore.
+Will check if the header starts by /** , /*  or // and end with \*/ or //.
+To make easier the comparison, removes " ", "\n", "\r", "\t", "//" symbols for each line to compare but will keep empty lines.
 If a line of the on-process file does not match to the line of the mention file, the file will be rejected.
 
 
@@ -69,3 +69,10 @@ Moreover it would be possible to deal with several licenses (with several copyri
 Maybe integration with Cocoapods or Fastlane.  
 
 Feel free to make pull requests :)
+
+
+## Who uses it?
+
+* Baah box project (Orange SA) - iOS app: https://github.com/Orange-OpenSource/BaahBox-iOS
+
+

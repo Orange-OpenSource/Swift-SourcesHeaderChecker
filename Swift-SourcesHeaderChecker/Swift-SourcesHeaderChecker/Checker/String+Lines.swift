@@ -66,15 +66,25 @@ extension String {
         return self.filter { !values.contains($0) }
     }
     
-    /// Checks if the String can be considered as a comment line, i.e. starts
+    /// Checks if the String can be considered as a starting comment line, i.e. starts
     /// with special symbols like '/**', '/*' or '//'
     /// - Returns:
     ///     - True if starts with such symbols, false otherwise
     ///
-    func isCommentLine() -> Bool {
+    func matchStartCommentLine() -> Bool {
         return self.starts(with: "/**")
         || self.starts(with: "/*")
         || self.starts(with: "//")
+    }
+
+    /// Checks if the String can be considered as an ending comment line, i.e. starts
+    /// with special symbols like '*/', or "//"
+    /// - Returns:
+    ///     - True if starts with such symbols, false otherwise
+    ///
+    func matchEndCommentLine() -> Bool {
+        return self.starts(with: "*/")
+            || self.starts(with: "//")
     }
     
 }

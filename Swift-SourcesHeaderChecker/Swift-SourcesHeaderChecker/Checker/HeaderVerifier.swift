@@ -92,7 +92,7 @@ struct HeaderVerifier {
         }
 
         // Check if the line starts by /**, /* or //
-        if !currentFileContent.isCommentLine() {
+        if !currentFileContent.matchStartCommentLine() {
             output.write("⚠️  It seems the Swift file at (\(path)) does not start with '/**' or '/*' or '//'. Will reject it.")
             return false
         }
@@ -115,8 +115,9 @@ struct HeaderVerifier {
         }
         
         // TODO: Deal with end by //
-        if splittedFileContent.last?.clear() != "*/" {
-            output.write("⚠️  It seems this Swift file (\(path)) has its header closed by another symbol than */")
+        if !(splittedFileContent.last?.matchEndCommentLine())! {
+            print("---- \(splittedFileContent)")
+            output.write("⚠️  It seems this Swift file (\(path)) has its header closed by another symbol than */ or //")
         }
         
         return true
