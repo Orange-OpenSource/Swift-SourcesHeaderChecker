@@ -110,13 +110,13 @@ struct ConsoleOutput {
 /// Structure to use so as to read console entries or arguments
 ///
 /// - Author: Pierre-Yves Lapersonne
-/// - Version: 1.0.0
+/// - Version: 2.0.0
 /// - Since: 01/07/2019
 ///
 struct ConsoleInput {
     
     /// Process the bundle of arguments given to the program and check their values.
-    /// Arguments must be a 5-length array or a 2-length array.
+    /// Arguments must be a 7-length array or a 2-length array.
     /// Item 0 of this array is the program name, other elements are the parameters.
     ///
     /// - Parameters:
@@ -136,7 +136,7 @@ struct ConsoleInput {
             return [(ConsoleArgumentTypes.version, "")]
         }
         
-        let expectedMinimalNumberOfArguments = 5
+        let expectedMinimalNumberOfArguments = 7
         if argsCount != expectedMinimalNumberOfArguments
             && argsCount != (expectedMinimalNumberOfArguments + 1){ // + 1 -> maybe add of --verbose
             return [(ConsoleArgumentTypes.undefined, "")]
