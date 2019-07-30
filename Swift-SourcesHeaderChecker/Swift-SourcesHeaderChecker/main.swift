@@ -30,9 +30,9 @@
 ///
 /// Program exists:
 ///     - (-1): something wrong occured (command line options for example)
-///     - (0): no error appeared, normal exit without image processing (e.g. display help)
-///     - (+1): normal exit but failure occured during check of files (i.e. at least 1 file does not leag notice ehader)
-///     - (+2): normal exit, all files contain the legal mention
+///     - (0): no error appeared, normal exit without file processing (e.g. display help)
+///     - (+1): normal exit but failure occured during check of files (i.e. at least 1 file does not have legal notice header)
+///     - (+2): normal exit, all source files contain the legal notices
 ///
 /// - Author: Pierre-Yves Lapersonne
 /// - Version: 1.1.0

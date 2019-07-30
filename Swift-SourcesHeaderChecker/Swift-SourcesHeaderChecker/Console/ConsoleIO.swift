@@ -107,10 +107,10 @@ struct ConsoleOutput {
     
 }
 
-/// Structure to use so as to read console entries or arguments
+/// Structure to use so as to read console entries or arguments and get their values
 ///
 /// - Author: Pierre-Yves Lapersonne
-/// - Version: 2.0.0
+/// - Version: 2.1.0
 /// - Since: 01/07/2019
 ///
 struct ConsoleInput {
@@ -167,7 +167,7 @@ struct ConsoleInput {
     ///     - a boolean value, true if available false otherwise
     ///
     private func isVerboseDefined(in arguments: [String]) -> Bool {
-        return  arguments.filter { $0 == "--verbose" }.count == 1
+        return arguments.filter { $0 == "--verbose" }.count == 1
     }
     
 }

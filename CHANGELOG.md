@@ -11,4 +11,4 @@
 - More details in documentation
 - Deal with headers starting with //
 - Can ignore some lines in the files to process (e.g. when there is some noice like file name)
-- Can be more rough and triggers warnings instead of errors if a file is not compliant with the notice
+- List of files to exclude from the process (e.g. for generated classes, third-party files...)
