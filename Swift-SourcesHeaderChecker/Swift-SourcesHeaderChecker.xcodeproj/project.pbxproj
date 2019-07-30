@@ -76,7 +76,6 @@
 				5137EBE322CA260A0071BB7D /* Checker */,
 				5137EBDA22CA07650071BB7D /* Console */,
 				5137EBD322CA06580071BB7D /* main.swift */,
-				5137EBE622CA268F0071BB7D /* SourcesHeaderChecker.swift */,
 			);
 			path = "Swift-SourcesHeaderChecker";
 			sourceTree = "<group>";
@@ -95,6 +94,7 @@
 		5137EBE322CA260A0071BB7D /* Checker */ = {
 			isa = PBXGroup;
 			children = (
+				5137EBE622CA268F0071BB7D /* SourcesHeaderChecker.swift */,
 				5137EBE422CA26280071BB7D /* FolderCrawler.swift */,
 				5137EBE822CA27530071BB7D /* HeaderVerifier.swift */,
 				5137EBEA22CA3D960071BB7D /* String+Lines.swift */,
