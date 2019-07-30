@@ -115,7 +115,7 @@ do {
 let ignoreLines = Int(parameters.filter { $0.0 == .ignoringLines }[0].1) ?? -1
 
 if ignoreLines == -1 {
-    consoleWritter.write("The number of liens to ignore is not well defined. Must be a positive or nul integer", to: .error)
+    consoleWritter.write("The number of lines to ignore is not well defined. Must be a positive or nul integer", to: .error)
     exit(-1)
 }
 
