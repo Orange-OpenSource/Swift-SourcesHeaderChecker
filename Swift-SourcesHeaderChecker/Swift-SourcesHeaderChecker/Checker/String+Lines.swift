@@ -45,26 +45,6 @@ extension String {
         return count
     }
     
-    /// Returns the lones of the string in an Array without the first k lines
-    /// - Parameters:
-    ///     - k: The number of lines to ignore starting from the first line, must be >= 0
-    /// - Returns:
-    ///     - The array of lines
-    ///
-    func linesSince(k start: Int) -> [String] {
-        return Array(lines.suffix(from: start))
-    }
-    
-    /// Returns the lones of the string in an Array without the first k lines
-    /// - Parameters:
-    ///     - k: The number of lines to ignore starting from the first line, must be >= 0
-    /// - Returns:
-    ///     - The shortened string
-    ///
-    func linesSince(k start: Int) -> String {
-        return Array(lines.suffix(from: start)).joined()
-    }
-    
     /// Returns the first k lines of the string in an Array
     /// - Parameters:
     ///     - k: The maximum number of lines to return
@@ -74,17 +54,7 @@ extension String {
     func linesUntil(k limit: Int) -> [String] {
         return Array(lines.prefix(limit))
     }
-    
-    /// Returns the first k lines of the string in an Array
-    /// - Parameters:
-    ///     - k: The maximum number of lines to return
-    /// - Returns:
-    ///     - The shortened string
-    ///
-    func linesUntil(k limit: Int) -> String {
-        return Array(lines.prefix(limit)).joined()
-    }
-    
+ 
     /// Removes special characters in the string so as to make it cleaner.
     /// Not sure this function is optimized.
     /// - Parameters:

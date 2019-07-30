@@ -99,8 +99,8 @@ struct HeaderVerifier {
         
         // Compare line by line
         // FIXME Can we optimize this part with low-cost methods or standard API?
-        let cutFileContent: String = currentFileContent.linesSince(k: lines)
-        let splittedFileContent: [String] = cutFileContent.linesUntil(k: mention.linesCount + 2) // Keep ending line
+        var splittedFileContent = currentFileContent.linesUntil(k: mention.linesCount + 2) // Keep ending line
+        splittedFileContent = Array(splittedFileContent.suffix(from: lines - 1))
         let splittedMention = mention.lines
         for i in 0..<mention.linesCount {
             // TODO Deal with case where the name of the file is in the header -_-
