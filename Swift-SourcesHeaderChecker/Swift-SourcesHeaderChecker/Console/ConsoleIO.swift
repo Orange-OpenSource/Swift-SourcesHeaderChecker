@@ -120,7 +120,7 @@ struct ConsoleOutput {
 struct ConsoleInput {
     
     /// Process the bundle of arguments given to the program and check their values.
-    /// Arguments must be a 7-length array or a 2-length array.
+    /// Arguments must have a length or 2, 7, 8, 9 or 10.
     /// Item 0 of this array is the program name, other elements are the parameters.
     ///
     /// - Parameters:
@@ -141,14 +141,13 @@ struct ConsoleInput {
         }
         
         let expectedMinimalNumberOfArguments = 7
-        if argsCount != expectedMinimalNumberOfArguments
-             // + 1 -> maybe add of --verbose and --excluding list
-            && argsCount != (expectedMinimalNumberOfArguments + 3){
+        let expectedMaximalNumberOfArguments = 10 // --verbose, --excluding list
+        if argsCount < expectedMinimalNumberOfArguments || argsCount > expectedMaximalNumberOfArguments {
             return [(ConsoleArgumentTypes.undefined, "")]
         }
         
         var options: [(ConsoleArgumentTypes, String)] = []
-        if  isVerboseDefined(in: args) {
+        if isVerboseDefined(in: args) {
             options.append((.verbose, ""))
             args = args.filter { $0 != "--verbose" }
         }
@@ -167,12 +166,20 @@ struct ConsoleInput {
         
     }
     
-    /// Checks if the verbose option has been added oe not
+    /// Checks if the verbose option has been added or not
     /// - Returns:
     ///     - a boolean value, true if available false otherwise
     ///
     private func isVerboseDefined(in arguments: [String]) -> Bool {
         return arguments.filter { $0 == "--verbose" }.count == 1
+    }
+ 
+    /// Checks if the excluding option has been added or not
+    /// - Returns:
+    ///     - a boolean value, true if available false otherwise
+    ///
+    private func isExcludingDefined(in arguments: [String]) -> Bool {
+        return arguments.filter { $0 == "--excluding" }.count == 1
     }
     
 }
