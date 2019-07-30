@@ -92,9 +92,10 @@ struct HeaderVerifier {
             return false
         }
 
-        // Check if enough lines are ignored compared to the under-process file
+        // Check if enough lines are ignored compared to the under-process file size
         if lines >= currentFileContent.linesCount {
-            output.write("⚠️  The number of lines to ignore is not well defined. Must be a positive or nul integer", to: .error)
+            output.write("⚠️  The number of lines to ignore is greater than the number of lines of the file to process",
+                         to: .error)
             return false
         }
         
@@ -103,36 +104,29 @@ struct HeaderVerifier {
             output.write("⚠️  It seems the Swift file at (\(path)) does not start with '/**' or '/*' or '//'. Will reject it.")
             return false
         }
-        
-        // Defines limits and correct them if needed
-        let upperLimit = mention.linesCount + 2 // Keep ending line
 
+        // Reduce the file using ignored lines
+        // FIXME Dirty!
+        let topRecudedFileContent = currentFileContent.lines.suffix(from: lines).joined(separator: "\n")
+        
+        // Keep just enough lines
+        let bottomReducedFileContent = topRecudedFileContent.linesUntil(k: mention.linesCount + 2) // Keep ending line
+        
         // Compare line by line
-        // FIXME Can we optimize this part with low-cost methods or standard API?
-        var splittedFileContent = currentFileContent.linesUntil(k: upperLimit)
-        
-        if lines >= splittedFileContent.count {
-            output.write("""
-            After keeping just enough lines to extract the header from the file, there is not enough lines to compare. Please reduce the number of lines to ignore
-            """, to: .error)
-            return false
-        }
-        
-        splittedFileContent = Array(splittedFileContent.suffix(from: lines))
         let splittedMention = mention.lines
         for i in 0..<mention.linesCount {
             let cleanedMentionLine = splittedMention[i].clear()
-            let cleanedFileContentLine = splittedFileContent[i].clear()
+            let cleanedFileContentLine = bottomReducedFileContent[i].clear()
             if cleanedMentionLine != cleanedFileContentLine {
                 output.write("❌ The line \(i) did not match between the file \(path) and the header. Will reject it.")
                 output.write("\t - Here the line \(i) of the header: '\(splittedMention[i])'")
-                output.write("\t - Here the line \(i) of the current file: '\(splittedFileContent[i])'")
+                output.write("\t - Here the line \(i) of the current file: '\(bottomReducedFileContent[i])'")
                 return false
             }
         }
         
         // TODO: Deal with end by //
-        if !(splittedFileContent.last?.matchEndCommentLine())! {
+        if !(bottomReducedFileContent.last?.matchEndCommentLine())! {
             output.write("⚠️  It seems this Swift file (\(path)) has its header closed by another symbol than */ or //")
         }
         
