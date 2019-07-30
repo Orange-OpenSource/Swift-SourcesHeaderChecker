@@ -115,20 +115,34 @@ struct HeaderVerifier {
         // Compare line by line
         let splittedMention = mention.lines
         for i in 0..<mention.linesCount {
-            let cleanedMentionLine = splittedMention[i].clear()
-            let cleanedFileContentLine = bottomReducedFileContent[i].clear()
+            
+            let currentFileLine = bottomReducedFileContent[i]
+            let currentMentionLine = splittedMention[i]
+            
+            var cleanedFileContentLine = "", cleanedMentionLine = ""
+            
+            // Deal with case of final line with only //
+            if currentFileLine.count > 0 && currentFileLine != currentMentionLine {
+                cleanedFileContentLine = currentFileLine.clear()
+                cleanedMentionLine = currentMentionLine.clear()
+            } else {
+                cleanedFileContentLine = currentFileLine
+                cleanedMentionLine = currentMentionLine
+            }
+            
             if cleanedMentionLine != cleanedFileContentLine {
                 output.write("❌ The line \(i) did not match between the file \(path) and the header. Will reject it.")
-                output.write("\t - Here the line \(i) of the header: '\(splittedMention[i])'")
-                output.write("\t - Here the line \(i) of the current file: '\(bottomReducedFileContent[i])'")
+                output.write("\t - Here the line \(i) of the header: '\(cleanedMentionLine)'")
+                output.write("\t - Here the line \(i) of the current file: '\(cleanedFileContentLine)'")
                 return false
             }
+            
         }
         
         // TODO: Deal with end by //
-        if !(bottomReducedFileContent.last?.matchEndCommentLine())! {
-            output.write("⚠️  It seems this Swift file (\(path)) has its header closed by another symbol than */ or //")
-        }
+//        if !(bottomReducedFileContent.last?.matchEndCommentLine())! {
+//            output.write("⚠️  It seems this Swift file (\(path)) has its header closed by another symbol than */ or //")
+//        }
         
         return true
         
