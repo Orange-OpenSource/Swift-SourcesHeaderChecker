@@ -132,8 +132,8 @@ struct HeaderVerifier {
             
             if cleanedMentionLine != cleanedFileContentLine {
                 output.write("❌ The line \(i) did not match between the file \(path) and the header. Will reject it.")
-                output.write("\t - Here the line \(i) of the header: '\(cleanedMentionLine)'")
-                output.write("\t - Here the line \(i) of the current file: '\(cleanedFileContentLine)'")
+                output.write("\t - Here the line \(i) of the header: '\(currentMentionLine)'")
+                output.write("\t - Here the line \(i) of the current file: '\(currentFileLine)'")
                 return false
             }
             
