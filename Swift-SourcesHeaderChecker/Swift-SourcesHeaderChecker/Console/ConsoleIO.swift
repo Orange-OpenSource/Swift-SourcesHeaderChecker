@@ -26,7 +26,7 @@ import Foundation
 /// Structure to use so as to write in output channels some messages
 ///
 /// - Author: Pierre-Yves Lapersonne
-/// - Version: 1.0.0
+/// - Version: 2.0.0
 /// - Since: 01/07/2019
 ///
 struct ConsoleOutput {
@@ -39,7 +39,7 @@ struct ConsoleOutput {
         write("* Copyright (C) 2019 Orange SA                                          *")
         write("* MIT License                                                           *")
         write("* Version: \(VERSION)                                                        *")
-        write("* Check easily in sources files contain legal notices in headers        *")
+        write("* Check easily if sources files contain legal notices in headers        *")
         write("*************************************************************************")
     }
     
@@ -53,16 +53,21 @@ struct ConsoleOutput {
     ///
     func printUsage() {
         let executableName = (CommandLine.arguments[0] as NSString).lastPathComponent
-        write("Usage:")
-        write("\t\(executableName) --folder path --header content [--verbose]")
-        write("\t\t - path: The path to the root folder containing the source files to process")
-        write("\t\t - content: The path to the file containing the header content to look for, raw string, without any glue like /** /// <!--")
-        write("or")
-        write("\t\(executableName) --help")
-        write("\t\t To display this help message")
-        write("or")
-        write("\t\(executableName) --version")
-        write("\t\t To display the version of the program")
+        let usage = """
+        Usage:
+        \t\(executableName) --folder path --header content --ignoring lines --excluding list [--verbose]
+        \t\t - path: The path to the root folder containing the source files to process
+        \t\t - content: The path to the file containing the header content to look for, raw string, without any glue like /** /// <!--
+        \t\t - lines: The numbers of line to ignore at the beginning of the file to process (0 = do not ignore lines)
+        \t\t - list: The path of a text file containing on each line the path to a file to exclude from the program, i.e. to not read and process
+        or
+        \t\(executableName) --help
+        \t\t To display this help message
+        or
+        \t\(executableName) --version
+        \t\t To display the version of the program
+        """
+        write(usage)
     }
     
     /// Displays in the standard output the version of the program
@@ -106,16 +111,16 @@ struct ConsoleOutput {
     
 }
 
-/// Structure to use so as to read console entries or arguments
+/// Structure to use so as to read console entries or arguments and get their values
 ///
 /// - Author: Pierre-Yves Lapersonne
-/// - Version: 1.0.0
+/// - Version: 2.1.0
 /// - Since: 01/07/2019
 ///
 struct ConsoleInput {
     
     /// Process the bundle of arguments given to the program and check their values.
-    /// Arguments must be a 5-length array or a 2-length array.
+    /// Arguments must have a length or 2, 7, 8, 9 or 10.
     /// Item 0 of this array is the program name, other elements are the parameters.
     ///
     /// - Parameters:
@@ -135,19 +140,19 @@ struct ConsoleInput {
             return [(ConsoleArgumentTypes.version, "")]
         }
         
-        let expectedMinimalNumberOfArguments = 5
-        if argsCount != expectedMinimalNumberOfArguments
-            && argsCount != (expectedMinimalNumberOfArguments + 1){ // + 1 -> maybe add of --verbose
+        let expectedMinimalNumberOfArguments = 9
+        let expectedMaximalNumberOfArguments = expectedMinimalNumberOfArguments + 1 // --verbose
+        if argsCount < expectedMinimalNumberOfArguments || argsCount > expectedMaximalNumberOfArguments {
             return [(ConsoleArgumentTypes.undefined, "")]
         }
         
         var options: [(ConsoleArgumentTypes, String)] = []
-        if  isVerboseDefined(in: args) {
+        if isVerboseDefined(in: args) {
             options.append((.verbose, ""))
             args = args.filter { $0 != "--verbose" }
         }
         
-        for index in stride(from: 1, to: argsCount-1, by: 2 ){
+        for index in stride(from: 1, to: args.count-1, by: 2 ){
             let option = ConsoleArgumentTypes(value: args[index])
             guard option != .undefined else {
                 return [(option, "")]
@@ -161,12 +166,20 @@ struct ConsoleInput {
         
     }
     
-    /// Checks if the verbose option has been added oe not
+    /// Checks if the verbose option has been added or not
     /// - Returns:
     ///     - a boolean value, true if available false otherwise
     ///
     private func isVerboseDefined(in arguments: [String]) -> Bool {
-        return  arguments.filter { $0 == "--verbose" }.count == 1
+        return arguments.filter { $0 == "--verbose" }.count == 1
+    }
+ 
+    /// Checks if the excluding option has been added or not
+    /// - Returns:
+    ///     - a boolean value, true if available false otherwise
+    ///
+    private func isExcludingDefined(in arguments: [String]) -> Bool {
+        return arguments.filter { $0 == "--excluding" }.count == 1
     }
     
 }

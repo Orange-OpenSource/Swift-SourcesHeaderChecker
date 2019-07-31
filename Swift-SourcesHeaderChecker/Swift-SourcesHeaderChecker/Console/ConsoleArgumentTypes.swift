@@ -26,7 +26,7 @@ import Foundation
 /// The types of options to give to the program.
 ///
 /// - Author: Pierre-Yves Lapersonne
-/// - Version: 1.0.0
+/// - Version: 2.0.0
 /// - Since: 01/07/2019
 ///
 enum ConsoleArgumentTypes {
@@ -36,6 +36,12 @@ enum ConsoleArgumentTypes {
     
     /// The path to the file containing the header to look for
     case headerContent
+    
+    /// The number of liens to ignore at the top of the files
+    case ignoringLines
+    
+    /// The path of a file containing the files' paths to exclude
+    case excludingFiles
     
     /// Display the help / usage
     case help
@@ -59,6 +65,10 @@ enum ConsoleArgumentTypes {
             self = .folderToProcess
         case "--header":
             self = .headerContent
+        case "--ignoring":
+            self = .ignoringLines
+        case "--excluding":
+            self = .excludingFiles
         case "--help":
             self = .help
         case "--version":

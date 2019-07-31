@@ -30,12 +30,12 @@
 ///
 /// Program exists:
 ///     - (-1): something wrong occured (command line options for example)
-///     - (0): no error appeared, normal exit without image processing (e.g. display help)
-///     - (+1): normal exit but failure occured during check of files (i.e. at least 1 file does not leag notice ehader)
-///     - (+2): normal exit, all files contain the legal mention
+///     - (0): no error appeared, normal exit without file processing (e.g. display help)
+///     - (+1): normal exit but failure occured during check of files (i.e. at least 1 file does not have legal notice header)
+///     - (+2): normal exit, all source files contain the legal notices
 ///
 /// - Author: Pierre-Yves Lapersonne
-/// - Version: 1.0.0
+/// - Version: 1.1.0
 /// - Since: 01/07/2019
 ///
 
@@ -43,7 +43,7 @@ import Foundation
 
 // Mark: - Configuration
 
-public let VERSION = "1.0.0"
+public let VERSION = "2.0.0"
 public var VERBOSE = false
 
 private let consoleWritter = ConsoleOutput()
@@ -72,35 +72,31 @@ if argumentsParser.isForVersion(arguments: parameters) {
     exit(0)
 }
 
-if argumentsParser.isVerboseDefined(in: parameters) {
+if argumentsParser.isDefined(.verbose, in: parameters) {
     VERBOSE = true
 }
 
 // Mark: - Check parameters
 
 let folderToProcess = parameters.filter { $0.0 == .folderToProcess }[0].1
-let headerContentFile = parameters.filter { $0.0 == .headerContent }[0].1
-
 if folderToProcess.isEmpty {
     consoleWritter.write("The folder to process is undefined", to: .error)
     exit(-1)
 }
-
 if !FileManager.default.fileExists(atPath: folderToProcess) {
     consoleWritter.write("The folder to process does not exist, please check its path", to: .error)
     exit(-1)
 }
 
+let headerContentFile = parameters.filter { $0.0 == .headerContent }[0].1
 if headerContentFile.isEmpty {
     consoleWritter.write("The path containing the header content to look for is undefined", to: .error)
     exit(-1)
 }
-
 if !FileManager.default.fileExists(atPath: headerContentFile) {
     consoleWritter.write("The file containing the header to look for does not exist, please check its path", to: .error)
     exit(-1)
 }
-
 var headerContent = ""
 do {
     headerContent = try String(contentsOf: URL(fileURLWithPath: headerContentFile), encoding: .utf8)
@@ -110,11 +106,37 @@ do {
     exit(-1)
 }
 
+let ignoreLines = Int(parameters.filter { $0.0 == .ignoringLines }[0].1) ?? -1
+if ignoreLines == -1 {
+    consoleWritter.write("The number of lines to ignore is not well defined. Must be a positive or nul integer", to: .error)
+    exit(-1)
+}
+
+var excludedFilesList = ""
+if argumentsParser.isDefined(.excludingFiles, in: parameters) {
+    let exludedFilesListFileName = parameters.filter { $0.0 == .excludingFiles }[0].1
+    if !FileManager.default.fileExists(atPath: exludedFilesListFileName) {
+        consoleWritter.write("The file with the list of files to exclude does not exist, please check its path", to: .error)
+        exit(-1)
+    }
+    do {
+        excludedFilesList = try String(contentsOf: URL(fileURLWithPath: exludedFilesListFileName), encoding: .utf8)
+    } catch let error {
+        ConsoleOutput().write("Something bad occured during header file read: \(error.localizedDescription)",
+        to: .error)
+        exit(-1)
+    }
+    consoleWritter.write("Will exclude files defined in '\(exludedFilesListFileName)'")
+}
+
 // Mark: - Core logic
 
-consoleWritter.write("Will look in folder '\(folderToProcess)' for mention in file '\(headerContentFile)'", to: .standard)
+consoleWritter.write("""
+Will look in folder '\(folderToProcess)' for mention in file '\(headerContentFile)' ignoring '\(ignoreLines)' lines
+""", to: .standard)
 
-let areAllResourcesSuitable = SourcesHeaderChecker("swift").lookIn(folder: folderToProcess, for: headerContent)
+let areAllResourcesSuitable = SourcesHeaderChecker("swift")
+    .lookIn(folder: folderToProcess, for: headerContent, ignoring: ignoreLines, excluding: excludedFilesList)
 
 // Mark: - Check of results
 
