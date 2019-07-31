@@ -55,7 +55,7 @@ Swift-SourcesHeaderChecker --folder "./src" --header "./LICENSE.txt" --ignoring 
 Running the program _Swift-SourcesHeaderChecker_ starting from folder at _src_ looking for header defined in the _LICENSE.txt_, ignoring first 2 lines because they contain some noise (e.g. file name), in verbose mode, without exclusion list:
 
 ```shell
-Swift-SourcesHeaderChecker --folder "./src" --header "./LICENSE.txt" --ignoring 2 --excluding "" --verbose
+Swift-SourcesHeaderChecker --folder "./src" --header "./LICENSE.txt" --ignoring 2 --verbose
 ```
 
 
