@@ -114,11 +114,19 @@ if ignoreLines == -1 {
 
 var excludedFilesList = ""
 if argumentsParser.isDefined(.excludingFiles, in: parameters) {
-    excludedFilesList = parameters.filter { $0.0 == .excludingFiles }[0].1
-    if !FileManager.default.fileExists(atPath: excludedFilesList) {
+    let exludedFilesListFileName = parameters.filter { $0.0 == .excludingFiles }[0].1
+    if !FileManager.default.fileExists(atPath: exludedFilesListFileName) {
         consoleWritter.write("The file with the list of files to exclude does not exist, please check its path", to: .error)
         exit(-1)
     }
+    do {
+        excludedFilesList = try String(contentsOf: URL(fileURLWithPath: exludedFilesListFileName), encoding: .utf8)
+    } catch let error {
+        ConsoleOutput().write("Something bad occured during header file read: \(error.localizedDescription)",
+        to: .error)
+        exit(-1)
+    }
+    consoleWritter.write("Will exclude files defined in '\(exludedFilesListFileName)'")
 }
 
 // Mark: - Core logic

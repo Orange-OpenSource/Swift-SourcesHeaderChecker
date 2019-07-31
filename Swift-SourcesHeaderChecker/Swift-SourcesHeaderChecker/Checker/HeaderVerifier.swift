@@ -54,7 +54,7 @@ struct HeaderVerifier {
         
         output.verbose("Will process \(files.count) file(s)")
         
-        let protectedFiles = protected.lines
+        let protectedFiles = protected.lines.filter({ !$0.clear().isEmpty })
         if protected.linesCount > 0 {
             output.verbose("⚠️  \(protectedFiles.count) file(s) will be ignored")
         }
