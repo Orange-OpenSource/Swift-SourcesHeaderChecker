@@ -12,3 +12,7 @@
 - Deal with headers starting with //
 - Can ignore some lines in the files to process (e.g. when there is some noice like file name)
 - List of files to exclude from the process (e.g. for generated classes, third-party files...)
+
+## Version 2.0.1
+
+- Exclusion list option is optional
