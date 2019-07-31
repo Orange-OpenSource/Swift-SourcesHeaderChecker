@@ -55,7 +55,7 @@ struct ConsoleOutput {
         let executableName = (CommandLine.arguments[0] as NSString).lastPathComponent
         let usage = """
         Usage:
-        \t\(executableName) --folder path --header content --ignoring lines --excluding list [--verbose]
+        \t\(executableName) --folder path --header content --ignoring lines [--excluding list] [--verbose]
         \t\t - path: The path to the root folder containing the source files to process
         \t\t - content: The path to the file containing the header content to look for, raw string, without any glue like /** /// <!--
         \t\t - lines: The numbers of line to ignore at the beginning of the file to process (0 = do not ignore lines)
@@ -140,8 +140,8 @@ struct ConsoleInput {
             return [(ConsoleArgumentTypes.version, "")]
         }
         
-        let expectedMinimalNumberOfArguments = 9
-        let expectedMaximalNumberOfArguments = expectedMinimalNumberOfArguments + 1 // --verbose
+        let expectedMinimalNumberOfArguments = 9 - 2
+        let expectedMaximalNumberOfArguments = expectedMinimalNumberOfArguments + 1 + 2// --verbose
         if argsCount < expectedMinimalNumberOfArguments || argsCount > expectedMaximalNumberOfArguments {
             return [(ConsoleArgumentTypes.undefined, "")]
         }
