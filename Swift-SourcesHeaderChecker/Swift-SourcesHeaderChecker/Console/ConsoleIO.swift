@@ -39,7 +39,7 @@ struct ConsoleOutput {
         write("* Copyright (C) 2019 Orange SA                                          *")
         write("* MIT License                                                           *")
         write("* Version: \(VERSION)                                                        *")
-        write("* Check easily in sources files contain legal notices in headers        *")
+        write("* Check easily if sources files contain legal notices in headers        *")
         write("*************************************************************************")
     }
     

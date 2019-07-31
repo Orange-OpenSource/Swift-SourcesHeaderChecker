@@ -52,15 +52,17 @@ struct HeaderVerifier {
     func look(at files: [String], for mention: String, ignoring lines: Int,
               excluding protected: String  = "") -> Bool {
         
-        output.verbose("Will process \(files.count) files")
+        output.verbose("Will process \(files.count) file(s)")
         
         let protectedFiles = protected.lines
-        output.verbose("⚠️ \(protectedFiles.count) files will be ignored")
+        if protected.linesCount > 0 {
+            output.verbose("⚠️  \(protectedFiles.count) file(s) will be ignored")
+        }
         
         var allFilesAreSuitable = true
         for file in files {
-            if !protectedFiles.contains(file) {
-                output.verbose("⚠️ Ignoring file '\(file)")
+            if protectedFiles.contains(file) {
+                output.verbose("⚠️  Ignoring file '\(file)")
             } else {
                 output.verbose("Processing file '\(file)")
                 let isFileSuitable = look(at: file, for: mention, ignoring: lines)

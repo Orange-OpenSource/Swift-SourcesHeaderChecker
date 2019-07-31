@@ -112,10 +112,13 @@ if ignoreLines == -1 {
     exit(-1)
 }
 
-let excludedFilesList = parameters.filter { $0.0 == .excludingFiles }[0].1
-if !FileManager.default.fileExists(atPath: excludedFilesList) {
-    consoleWritter.write("The file with the list of files to exclude does not exist, please check its path", to: .error)
-    exit(-1)
+var excludedFilesList = ""
+if argumentsParser.isDefined(.excludingFiles, in: parameters) {
+    excludedFilesList = parameters.filter { $0.0 == .excludingFiles }[0].1
+    if !FileManager.default.fileExists(atPath: excludedFilesList) {
+        consoleWritter.write("The file with the list of files to exclude does not exist, please check its path", to: .error)
+        exit(-1)
+    }
 }
 
 // Mark: - Core logic
