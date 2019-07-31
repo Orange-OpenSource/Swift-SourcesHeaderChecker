@@ -55,11 +55,11 @@ struct ConsoleOutput {
         let executableName = (CommandLine.arguments[0] as NSString).lastPathComponent
         let usage = """
         Usage:
-        \t\(executableName) --folder path --header content --ignoring lines [--excluding list] [--verbose]
+        \t\(executableName) --folder path --header content --ignoring lines --excluding list [--verbose]
         \t\t - path: The path to the root folder containing the source files to process
         \t\t - content: The path to the file containing the header content to look for, raw string, without any glue like /** /// <!--
         \t\t - lines: The numbers of line to ignore at the beginning of the file to process (0 = do not ignore lines)
-        \t\t - list: THe path of a text file containing on each line the path to a file to exclude from the program, i.e. to not read and process
+        \t\t - list: The path of a text file containing on each line the path to a file to exclude from the program, i.e. to not read and process
         or
         \t\(executableName) --help
         \t\t To display this help message
@@ -140,8 +140,8 @@ struct ConsoleInput {
             return [(ConsoleArgumentTypes.version, "")]
         }
         
-        let expectedMinimalNumberOfArguments = 7
-        let expectedMaximalNumberOfArguments = 10 // --verbose, --excluding list
+        let expectedMinimalNumberOfArguments = 9
+        let expectedMaximalNumberOfArguments = expectedMinimalNumberOfArguments + 1 // --verbose
         if argsCount < expectedMinimalNumberOfArguments || argsCount > expectedMaximalNumberOfArguments {
             return [(ConsoleArgumentTypes.undefined, "")]
         }
@@ -152,7 +152,7 @@ struct ConsoleInput {
             args = args.filter { $0 != "--verbose" }
         }
         
-        for index in stride(from: 1, to: argsCount-1, by: 2 ){
+        for index in stride(from: 1, to: args.count-1, by: 2 ){
             let option = ConsoleArgumentTypes(value: args[index])
             guard option != .undefined else {
                 return [(option, "")]
