@@ -31,13 +31,13 @@ To get the version of the program:
 EXECUTABLE --version
 ```
 
-To run the program where it have to find recursively in FOLDER the source files to check if they contain headers defined in FILE_CONTENT (path to the plain text file) ignoring first LINES lines and ignoring files defined in LIST:
+To run the program where it have to find recursively in FOLDER the source files to check if they contain headers defined in FILE_CONTENT (path to the plain text file) ignoring first LINES lines:
 
 ```shell
-EXECUTABLE --folder FOLDER --header FILE_CONTENT --ignoring LINES --excluding LIST
+EXECUTABLE --folder FOLDER --header FILE_CONTENT --ignoring LINES
 ```
 
-You can also make the program display more messages with the verbose option:
+You can also make the program display more messages with the verbose option and an exclusion list ignoring files defined in LIST:
 
 ```shell
 EXECUTABLE --folder FOLDER --header FILE_CONTENT --ignoring LINES --excluding LIST --verbose

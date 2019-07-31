@@ -35,7 +35,7 @@
 ///     - (+2): normal exit, all source files contain the legal notices
 ///
 /// - Author: Pierre-Yves Lapersonne
-/// - Version: 1.1.0
+/// - Version: 1.2.0
 /// - Since: 01/07/2019
 ///
 
@@ -43,7 +43,7 @@ import Foundation
 
 // Mark: - Configuration
 
-public let VERSION = "2.0.0"
+public let VERSION = "2.0.1"
 public var VERBOSE = false
 
 private let consoleWritter = ConsoleOutput()
