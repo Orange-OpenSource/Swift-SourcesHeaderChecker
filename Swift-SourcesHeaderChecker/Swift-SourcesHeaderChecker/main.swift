@@ -79,31 +79,25 @@ if argumentsParser.isDefined(.verbose, in: parameters) {
 // Mark: - Check parameters
 
 let folderToProcess = parameters.filter { $0.0 == .folderToProcess }[0].1
-
 if folderToProcess.isEmpty {
     consoleWritter.write("The folder to process is undefined", to: .error)
     exit(-1)
 }
-
 if !FileManager.default.fileExists(atPath: folderToProcess) {
     consoleWritter.write("The folder to process does not exist, please check its path", to: .error)
     exit(-1)
 }
 
 let headerContentFile = parameters.filter { $0.0 == .headerContent }[0].1
-
 if headerContentFile.isEmpty {
     consoleWritter.write("The path containing the header content to look for is undefined", to: .error)
     exit(-1)
 }
-
 if !FileManager.default.fileExists(atPath: headerContentFile) {
     consoleWritter.write("The file containing the header to look for does not exist, please check its path", to: .error)
     exit(-1)
 }
-
 var headerContent = ""
-
 do {
     headerContent = try String(contentsOf: URL(fileURLWithPath: headerContentFile), encoding: .utf8)
 } catch let error {
@@ -113,10 +107,26 @@ do {
 }
 
 let ignoreLines = Int(parameters.filter { $0.0 == .ignoringLines }[0].1) ?? -1
-
 if ignoreLines == -1 {
     consoleWritter.write("The number of lines to ignore is not well defined. Must be a positive or nul integer", to: .error)
     exit(-1)
+}
+
+var excludedFilesList = ""
+if argumentsParser.isDefined(.excludingFiles, in: parameters) {
+    let exludedFilesListFileName = parameters.filter { $0.0 == .excludingFiles }[0].1
+    if !FileManager.default.fileExists(atPath: exludedFilesListFileName) {
+        consoleWritter.write("The file with the list of files to exclude does not exist, please check its path", to: .error)
+        exit(-1)
+    }
+    do {
+        excludedFilesList = try String(contentsOf: URL(fileURLWithPath: exludedFilesListFileName), encoding: .utf8)
+    } catch let error {
+        ConsoleOutput().write("Something bad occured during header file read: \(error.localizedDescription)",
+        to: .error)
+        exit(-1)
+    }
+    consoleWritter.write("Will exclude files defined in '\(exludedFilesListFileName)'")
 }
 
 // Mark: - Core logic
@@ -126,7 +136,7 @@ Will look in folder '\(folderToProcess)' for mention in file '\(headerContentFil
 """, to: .standard)
 
 let areAllResourcesSuitable = SourcesHeaderChecker("swift")
-    .lookIn(folder: folderToProcess, for: headerContent, ignoring: ignoreLines)
+    .lookIn(folder: folderToProcess, for: headerContent, ignoring: ignoreLines, excluding: excludedFilesList)
 
 // Mark: - Check of results
 

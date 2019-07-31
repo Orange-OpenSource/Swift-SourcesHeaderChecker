@@ -58,11 +58,13 @@ struct SourcesHeaderChecker {
     ///     - folder: The target folder to start looking
     ///     - notice: The notice/header to look for
     ///     - ignoring: The number of lines to ignore starting from the top of the processed file
+    ///     - excluding: The path to file containing files' paths to ignore for the program
     /// - Returns:
     ///     - A flag indicating if at least one file does not contain the suitable header (false) or if
     /// all the files are suitable (true)
     ///
-    func lookIn(folder target: String, for notice: String, ignoring lines: Int) -> Bool {
+    func lookIn(folder target: String, for notice: String, ignoring lines: Int,
+                excluding files: String = "") -> Bool {
         
         // Get files to verify
         // FIXME: May be quite heavy for too big projects
@@ -70,7 +72,7 @@ struct SourcesHeaderChecker {
         
         // Make the controls
         let areAllResourcesSuitable = HeaderVerifier()
-            .look(at: matchingRessources, for: notice, ignoring: lines)
+            .look(at: matchingRessources, for: notice, ignoring: lines, excluding: files)
         
         return areAllResourcesSuitable
         

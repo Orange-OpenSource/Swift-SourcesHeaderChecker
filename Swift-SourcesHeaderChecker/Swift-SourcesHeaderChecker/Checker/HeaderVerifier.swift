@@ -44,22 +44,37 @@ struct HeaderVerifier {
     ///     - at: The array of files' paths which must contain the header
     ///     - for: The content of the header to get in the top of the files
     ///     - ignoring: The number of lines to ignore starting from the top of the processed file
+    ///     - excluding: The path to file containing files' paths to ignore for the program
     /// - Returns:
     ///     - A boolean value indicating if the header is available in all the files (true)
     /// or not (false if at least 1 file)
     ///
-    func look(at files: [String], for mention: String, ignoring lines: Int) -> Bool {
-        output.verbose("Will process \(files.count) files")
+    func look(at files: [String], for mention: String, ignoring lines: Int,
+              excluding protected: String  = "") -> Bool {
+        
+        output.verbose("Will process \(files.count) file(s)")
+        
+        let protectedFiles = protected.lines.filter({ !$0.clear().isEmpty })
+        if protected.linesCount > 0 {
+            output.verbose("⚠️  \(protectedFiles.count) file(s) will be ignored")
+        }
+        
         var allFilesAreSuitable = true
         for file in files {
-            output.verbose("Processing file '\(file)")
-            let isFileSuitable = look(at: file, for: mention, ignoring: lines)
-            if !isFileSuitable {
-                output.write("❌ It seems the file at \(file) does not have a suitable header")
+            if protectedFiles.contains(file) {
+                output.verbose("⚠️  Ignoring file '\(file)")
+            } else {
+                output.verbose("Processing file '\(file)")
+                let isFileSuitable = look(at: file, for: mention, ignoring: lines)
+                if !isFileSuitable {
+                    output.write("❌ It seems the file at \(file) does not have a suitable header")
+                }
+                allFilesAreSuitable = allFilesAreSuitable && isFileSuitable
             }
-            allFilesAreSuitable = allFilesAreSuitable && isFileSuitable
         }
+        
         return allFilesAreSuitable
+        
     }
     
     /// Reads the content of the file at this path and look for the mention in its head.
@@ -83,7 +98,7 @@ struct HeaderVerifier {
     ///     - A boolean value indicating if the header is available (true) or not (false), or if
     /// the file to process is not suitable (false)
     ///
-    func look(at path: String, for mention: String, ignoring lines: Int) -> Bool {
+    private func look(at path: String, for mention: String, ignoring lines: Int) -> Bool {
         
         // Read the current file
         guard let currentFileContent = try?

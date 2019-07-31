@@ -40,6 +40,9 @@ enum ConsoleArgumentTypes {
     /// The number of liens to ignore at the top of the files
     case ignoringLines
     
+    /// The path of a file containing the files' paths to exclude
+    case excludingFiles
+    
     /// Display the help / usage
     case help
     
@@ -64,6 +67,8 @@ enum ConsoleArgumentTypes {
             self = .headerContent
         case "--ignoring":
             self = .ignoringLines
+        case "--excluding":
+            self = .excludingFiles
         case "--help":
             self = .help
         case "--version":
