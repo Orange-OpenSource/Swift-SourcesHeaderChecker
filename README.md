@@ -31,25 +31,31 @@ To get the version of the program:
 EXECUTABLE --version
 ```
 
-To run the program where it have to find recursively in FOLDER the source files to check if they contain headers defined in FILE_CONTENT (path to the plain text file) ignoring first LINES lines:
+To run the program where it have to find recursively in FOLDER the source files to check if they contain headers defined in FILE_CONTENT (path to the plain text file) ignoring first LINES lines and ignoring files defined in LIST:
 
 ```shell
-EXECUTABLE --folder FOLDER --header FILE_CONTENT --ignoring LINES
+EXECUTABLE --folder FOLDER --header FILE_CONTENT --ignoring LINES --excluding LIST
 ```
 
 You can also make the program display more messages with the verbose option:
 
 ```shell
-EXECUTABLE --folder FOLDER --header FILE_CONTENT --ignoring LINES --verbose
+EXECUTABLE --folder FOLDER --header FILE_CONTENT --ignoring LINES --excluding LIST --verbose
 ```
 
 
-## Example
+## Examples
 
-Running the program _Swift-SourcesHeaderChecker_ starting from folder at _src_ looking for header defined in the _LICENSE.txt_, ignoring first 2 lines because they contain some noise (e.g. file name):
+Running the program _Swift-SourcesHeaderChecker_ starting from folder at _src_ looking for header defined in the _LICENSE.txt_, ignoring first 2 lines because they contain some noise (e.g. file name), ignoring files of _excluding-list.txt_ (e.g. because they are generated):
 
 ```shell
-Swift-SourcesHeaderChecker --folder "./src" --header "./LICENSE.txt" --ignoring 2
+Swift-SourcesHeaderChecker --folder "./src" --header "./LICENSE.txt" --ignoring 2 --excluding "excluding-list.txt"
+```
+
+Running the program _Swift-SourcesHeaderChecker_ starting from folder at _src_ looking for header defined in the _LICENSE.txt_, ignoring first 2 lines because they contain some noise (e.g. file name), in verbose mode, without exclusion list:
+
+```shell
+Swift-SourcesHeaderChecker --folder "./src" --header "./LICENSE.txt" --ignoring 2 --excluding "" --verbose
 ```
 
 
@@ -93,7 +99,7 @@ HEADER_TEMPLATE="./LICENSE.txt"
 IGNORE=2
 EXCLUSIONS="path/to/exclusion/file.txt"
 
-$TOOL_PATH --folder "$TARGET_FOLDER" --header "$HEADER_TEMPLATE" --ignoring "$IGNORE" --exclude "$EXCLUSIONS"
+$TOOL_PATH --folder "$TARGET_FOLDER" --header "$HEADER_TEMPLATE" --ignoring "$IGNORE" --excluding "$EXCLUSIONS"
 result=$?
 
 if [ $result -eq 2 ]
