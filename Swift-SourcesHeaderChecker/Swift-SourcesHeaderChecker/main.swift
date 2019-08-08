@@ -35,13 +35,13 @@
 ///     - (+2): normal exit, all source files contain the legal notices
 ///
 /// - Author: Pierre-Yves Lapersonne
-/// - Version: 1.2.0
+/// - Version: 1.2.1
 /// - Since: 01/07/2019
 ///
 
 import Foundation
 
-// Mark: - Configuration
+// MARK: - Configuration
 
 public let VERSION = "2.0.1"
 public var VERBOSE = false
@@ -49,7 +49,7 @@ public var VERBOSE = false
 private let consoleWritter = ConsoleOutput()
 private let argumentsParser = ConsoleArgumentsParser()
 
-// Mark: - Deal with options
+// MARK: - Deal with options
 
 consoleWritter.printWelcome()
 
@@ -76,7 +76,7 @@ if argumentsParser.isDefined(.verbose, in: parameters) {
     VERBOSE = true
 }
 
-// Mark: - Check parameters
+// MARK: - Check parameters
 
 let folderToProcess = parameters.filter { $0.0 == .folderToProcess }[0].1
 if folderToProcess.isEmpty {
@@ -129,7 +129,7 @@ if argumentsParser.isDefined(.excludingFiles, in: parameters) {
     consoleWritter.write("Will exclude files defined in '\(exludedFilesListFileName)'")
 }
 
-// Mark: - Core logic
+// MARK: - Core logic
 
 consoleWritter.write("""
 Will look in folder '\(folderToProcess)' for mention in file '\(headerContentFile)' ignoring '\(ignoreLines)' lines
@@ -138,7 +138,7 @@ Will look in folder '\(folderToProcess)' for mention in file '\(headerContentFil
 let areAllResourcesSuitable = SourcesHeaderChecker("swift")
     .lookIn(folder: folderToProcess, for: headerContent, ignoring: ignoreLines, excluding: excludedFilesList)
 
-// Mark: - Check of results
+// MARK: - Check of results
 
 if !areAllResourcesSuitable {
     consoleWritter.write("🚨 FAILURE 🚨: There is at least one file without expected header")
@@ -149,5 +149,3 @@ if !areAllResourcesSuitable {
     consoleWritter.printBye()
     exit(2)
 }
-
-

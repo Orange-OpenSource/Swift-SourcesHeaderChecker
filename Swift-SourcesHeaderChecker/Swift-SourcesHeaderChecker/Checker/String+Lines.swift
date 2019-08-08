@@ -26,11 +26,11 @@ import Foundation
 /// Extension of the String legacy obejcts adding to it useful methods for lines processing
 ///
 /// - Author: Pierre-Yves Lapersonne
-/// - Version: 1.1.0
+/// - Version: 1.1.1
 /// - Since: 01/07/2019
 ///
 extension String {
- 
+
     /// The array of lines of the string, using the newlines characters to split it
     var lines: [String] {
         return self.components(separatedBy: NSCharacterSet.newlines)
@@ -44,7 +44,7 @@ extension String {
         }
         return count
     }
-    
+
     /// Returns the first k lines of the string in an Array
     /// - Parameters:
     ///     - k: The maximum number of lines to return
@@ -54,7 +54,7 @@ extension String {
     func linesUntil(k limit: Int) -> [String] {
         return Array(lines.prefix(limit))
     }
- 
+
     /// Removes special characters in the string so as to make it cleaner.
     /// Not sure this function is optimized.
     /// - Parameters:
@@ -65,7 +65,7 @@ extension String {
     func clear(of values: String = " \n\t\r//") -> String {
         return self.filter { !values.contains($0) }
     }
-    
+
     /// Checks if the String can be considered as a starting comment line, i.e. starts
     /// with special symbols like '/**', '/*' or '//'
     /// - Returns:
@@ -86,5 +86,5 @@ extension String {
         return self.starts(with: "*/")
             || self.starts(with: "//")
     }
-    
+
 }

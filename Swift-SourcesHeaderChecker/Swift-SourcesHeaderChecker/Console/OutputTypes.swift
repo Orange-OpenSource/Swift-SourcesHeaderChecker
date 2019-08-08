@@ -26,16 +26,15 @@ import Foundation
 /// The types of outputs dealt by the logger features.
 ///
 /// - Author: Pierre-Yves Lapersonne
-/// - Version: 1.0.0
+/// - Version: 1.0.1
 /// - Since: 01/07/2019
 ///
 enum OutputTypes {
-    
+
     /// Should use the error output
     case error
-    
+
     /// Should use the standard output
     case standard
-    
-}
 
+}

@@ -26,11 +26,11 @@ import Foundation
 /// Structure which has the aim of crawling in a folder to look for files ressources for further treatments.
 ///
 /// - Author: Pierre-Yves Lapersonne
-/// - Version: 1.0.0
+/// - Version: 1.0.1
 /// - Since: 01/07/2019
 ///
 struct FolderCrawler {
-    
+
     /// Goes recursively in the folder in parameter and keep only ressources matching the condition
     /// - Parameters:
     ///     - folder: The folder to process, path can be absolute or relative
@@ -39,7 +39,7 @@ struct FolderCrawler {
     ///     - An array of pathes to ressources matching the conditions
     ///
     func crawlIn(folder path: String, filtering byExtension: String) -> [String] {
-        
+
         let filesEnumerator = FileManager.default.enumerator(atPath: path)
         let filesPaths = filesEnumerator?.allObjects as! [String]
         let ressourcesPaths = filesPaths.filter {
@@ -49,19 +49,19 @@ struct FolderCrawler {
             }
             return fileExtension.range(of: byExtension, options: .regularExpression, range: nil, locale: nil) != nil
         }
-        
+
         let consoleOutput = ConsoleOutput()
         consoleOutput.write("Founds \(ressourcesPaths.count) files with the extension '\(byExtension)'")
-        
+
         var results: [String] = []
         for resourcePath in ressourcesPaths {
             let globalPath = "\(path)/\(resourcePath)" // FIXME: Seems dirty
             results.append(globalPath)
             consoleOutput.verbose("Found file located at '\(globalPath)'")
         }
-        
+
         return results
-        
+
     }
-    
+
 }
