@@ -1,0 +1,6 @@
+================================================================================
+MIT License
+================================================================================
+Component: SwiftLint Copyright (c) 2015 Realm Inc.
+License Text URL: licenses/LICENSE-SwiftLint.txt
+Source Code: https://github.com/realm/SwiftLint

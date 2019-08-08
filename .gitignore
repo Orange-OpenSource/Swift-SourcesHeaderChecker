@@ -1,11 +1,11 @@
 # Xcode
 # Picked from https://github.com/github/gitignore/blob/master/Global/Xcode.gitignore
 
-xcuserdata/
-build/
-DerivedData/
-*.xcworkspace
+Swift-SourcesHeaderChecker/Swift-SourcesHeaderChecker.xcodeproj/xcuserdata/
+Swift-SourcesHeaderChecker/build/
+Swift-SourcesHeaderCheckerDerivedData/
+Swift-SourcesHeaderChecker/*/*.xcworkspace
 
 # Swift
-.build/
-#Pods/
+Swift-SourcesHeaderChecker/.build/
+

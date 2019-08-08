@@ -16,3 +16,7 @@
 ## Version 2.0.1
 
 - Exclusion list option is optional
+
+## Version ?.?.?
+
+- Add SwiftLint to project
