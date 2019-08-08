@@ -30,7 +30,7 @@ import Foundation
 /// - Since: 01/07/2019
 ///
 struct ConsoleOutput {
-    
+
     /// Displays a welcome message
     ///
     func printWelcome() {
@@ -69,7 +69,7 @@ struct ConsoleOutput {
         """
         write(usage)
     }
-    
+
     /// Displays in the standard output the version of the program
     ///
     func printVersion() {
@@ -140,9 +140,9 @@ struct ConsoleInput {
             return [(ConsoleArgumentTypes.version, "")]
         }
 
-        let expectedMinimalNumberOfArguments = 9 - 2
-        let expectedMaximalNumberOfArguments = expectedMinimalNumberOfArguments + 1 + 2// --verbose
-        if argsCount < expectedMinimalNumberOfArguments || argsCount > expectedMaximalNumberOfArguments {
+        let expectedMinimalArgumentsCount = 9 - 2
+        let expectedMaximalArgumentsCount = expectedMinimalArgumentsCount + 1 + 2// --verbose
+        if argsCount < expectedMinimalArgumentsCount || argsCount > expectedMaximalArgumentsCount {
             return [(ConsoleArgumentTypes.undefined, "")]
         }
 

@@ -137,7 +137,7 @@ struct HeaderVerifier {
             var cleanedFileContentLine = "", cleanedMentionLine = ""
 
             // Deal with case of final line with only //
-            if currentFileLine.count > 0 && currentFileLine != currentMentionLine {
+            if !currentFileLine.isEmpty && currentFileLine != currentMentionLine {
                 cleanedFileContentLine = currentFileLine.clear()
                 cleanedMentionLine = currentMentionLine.clear()
             } else {
