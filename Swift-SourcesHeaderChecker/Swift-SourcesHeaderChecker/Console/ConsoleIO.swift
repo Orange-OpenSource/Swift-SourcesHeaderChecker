@@ -26,7 +26,7 @@ import Foundation
 /// Structure to use so as to write in output channels some messages
 ///
 /// - Author: Pierre-Yves Lapersonne
-/// - Version: 2.0.0
+/// - Version: 2.0.1
 /// - Since: 01/07/2019
 ///
 struct ConsoleOutput {
@@ -42,13 +42,13 @@ struct ConsoleOutput {
         write("* Check easily if sources files contain legal notices in headers        *")
         write("*************************************************************************")
     }
-    
+
     /// Displays the exit common message
     ///
     func printBye() {
         write("Execution completed, bye!")
     }
-    
+
     /// Displays in the standard output the usage of the program
     ///
     func printUsage() {
@@ -75,7 +75,7 @@ struct ConsoleOutput {
     func printVersion() {
         write("Version: \(VERSION)")
     }
-    
+
     /// Prints error message with more details
     ///
     func printBadCommandLineErrorMessage() {
@@ -83,7 +83,7 @@ struct ConsoleOutput {
         printUsage()
         printBye()
     }
-    
+
     /// Writes in the selected output the message
     /// - Parameters:
     ///     - message: The message to write
@@ -97,7 +97,7 @@ struct ConsoleOutput {
             fputs("💥 Error: \(message)\n", stderr)
         }
     }
-    
+
     /// Writes the message in the channel if the VERBOSE flag is enabled
     /// - Parameters:
     ///     - message: The message to write
@@ -108,17 +108,17 @@ struct ConsoleOutput {
             write(message, to: to)
         }
     }
-    
+
 }
 
 /// Structure to use so as to read console entries or arguments and get their values
 ///
 /// - Author: Pierre-Yves Lapersonne
-/// - Version: 2.1.0
+/// - Version: 2.1.1
 /// - Since: 01/07/2019
 ///
 struct ConsoleInput {
-    
+
     /// Process the bundle of arguments given to the program and check their values.
     /// Arguments must have a length or 2, 7, 8, 9 or 10.
     /// Item 0 of this array is the program name, other elements are the parameters.
@@ -129,43 +129,43 @@ struct ConsoleInput {
     ///     - An array of tuples containing the argument type and its value
     ///
     func processProgram(arguments args: inout [String]) -> [(ConsoleArgumentTypes, String)] {
-        
+
         let argsCount = args.count
-        
+
         if argsCount == 2 && args[1] == "--help" {
             return [(ConsoleArgumentTypes.help, "")]
         }
-        
+
         if argsCount == 2 && args[1] == "--version" {
             return [(ConsoleArgumentTypes.version, "")]
         }
-        
+
         let expectedMinimalNumberOfArguments = 9 - 2
         let expectedMaximalNumberOfArguments = expectedMinimalNumberOfArguments + 1 + 2// --verbose
         if argsCount < expectedMinimalNumberOfArguments || argsCount > expectedMaximalNumberOfArguments {
             return [(ConsoleArgumentTypes.undefined, "")]
         }
-        
+
         var options: [(ConsoleArgumentTypes, String)] = []
         if isVerboseDefined(in: args) {
             options.append((.verbose, ""))
             args = args.filter { $0 != "--verbose" }
         }
-        
-        for index in stride(from: 1, to: args.count-1, by: 2 ){
+
+        for index in stride(from: 1, to: args.count-1, by: 2) {
             let option = ConsoleArgumentTypes(value: args[index])
             guard option != .undefined else {
                 return [(option, "")]
             }
             if option != .verbose {
-                options.append((option,args[index+1]))
+                options.append((option, args[index+1]))
             }
         }
-        
+
         return options
-        
+
     }
-    
+
     /// Checks if the verbose option has been added or not
     /// - Returns:
     ///     - a boolean value, true if available false otherwise
@@ -173,7 +173,7 @@ struct ConsoleInput {
     private func isVerboseDefined(in arguments: [String]) -> Bool {
         return arguments.filter { $0 == "--verbose" }.count == 1
     }
- 
+
     /// Checks if the excluding option has been added or not
     /// - Returns:
     ///     - a boolean value, true if available false otherwise
@@ -181,5 +181,5 @@ struct ConsoleInput {
     private func isExcludingDefined(in arguments: [String]) -> Bool {
         return arguments.filter { $0 == "--excluding" }.count == 1
     }
-    
+
 }

@@ -26,35 +26,35 @@ import Foundation
 /// The types of options to give to the program.
 ///
 /// - Author: Pierre-Yves Lapersonne
-/// - Version: 2.0.0
+/// - Version: 2.0.1
 /// - Since: 01/07/2019
 ///
 enum ConsoleArgumentTypes {
-    
+
     /// The location of the folder to process recursively
     case folderToProcess
-    
+
     /// The path to the file containing the header to look for
     case headerContent
-    
+
     /// The number of liens to ignore at the top of the files
     case ignoringLines
-    
+
     /// The path of a file containing the files' paths to exclude
     case excludingFiles
-    
+
     /// Display the help / usage
     case help
-    
+
     /// Display the version
     case version
-    
+
     /// Define the verbose mode
     case verbose
-    
+
     /// Undefined option
     case undefined
-    
+
     /// Constructor
     /// - Parameters:
     ///     - value: The value given to the program as parameter
@@ -79,5 +79,5 @@ enum ConsoleArgumentTypes {
             self = .undefined
         }
     }
-    
+
 }

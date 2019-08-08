@@ -26,57 +26,57 @@ import Foundation
 /// Structure to use so as to parse raw parameters given to the command line in console mode
 ///
 /// - Author: Pierre-Yves Lapersonne
-/// - Version: 1.0.0
+/// - Version: 1.0.1
 /// - Since: 01/07/2019
 ///
 struct ConsoleArgumentsParser {
-    
+
     /// Checks if the arguments given in parameters of the command are well written and can be used, or not
     /// - Returns: A flag indicating of parameters canot be used (false) or can be (true)
     ///
     func areWellDefined(arguments params: [(ConsoleArgumentTypes, String)]) -> Bool {
-        
+
         if isForHelp(arguments: params) {
             return true
         }
-        
+
         if isForVersion(arguments: params) {
             return true
         }
-        
+
         if params.count < 3 || params.count > 5 {
             return false
         }
-        
+
         if !(isDefined(.folderToProcess, in: params)
             && isDefined(.headerContent, in: params)
             && isDefined(.ignoringLines, in: params)) {
             return false
         }
-        
+
         if (params.count == 4 || params.count == 5)
             && (!isDefined(.verbose, in: params) && !isDefined(.excludingFiles, in: params)) {
             return false
         }
-        
+
         return true
 
     }
-    
+
     /// Returns true if the option is for help message to display or false otherwise
     /// - Returns: A boolean value
     ///
     func isForHelp(arguments params: [(ConsoleArgumentTypes, String)]) -> Bool {
         return (params.count == 1 && params[0].0 == .help)
     }
-    
+
     /// Returns true if the option is for version message to display or false otherwise
     /// - Returns: A boolean value
     ///
     func isForVersion(arguments params: [(ConsoleArgumentTypes, String)]) -> Bool {
         return (params.count == 1 && params[0].0 == .version)
     }
-    
+
     /// Return if there is a defined option in the arguments (true) or not (false)
     /// - Parameters:
     ///     - option: The option to look for
@@ -87,5 +87,5 @@ struct ConsoleArgumentsParser {
         -> Bool {
         return arguments.filter { $0.0 == option }.count == 1
     }
-    
+
 }

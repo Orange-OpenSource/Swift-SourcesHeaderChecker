@@ -27,18 +27,18 @@ import Foundation
 /// leagal mentions in the header.
 ///
 /// - Author: Pierre-Yves Lapersonne
-/// - Version: 2.0.0
+/// - Version: 2.0.1
 /// - Since: 01/07/2019
 ///
 struct HeaderVerifier {
-    
-    // Mark: - Variables
-    
+
+    // MARK: - Variables
+
     /// To display messages in the console
     let output = ConsoleOutput()
-    
-    // Mark: - Functions
-    
+
+    // MARK: - Functions
+
     /// Reads the content of the all the files at these paths and look for the mention.
     /// - Parameters:
     ///     - at: The array of files' paths which must contain the header
@@ -51,14 +51,14 @@ struct HeaderVerifier {
     ///
     func look(at files: [String], for mention: String, ignoring lines: Int,
               excluding protected: String  = "") -> Bool {
-        
+
         output.verbose("Will process \(files.count) file(s)")
-        
+
         let protectedFiles = protected.lines.filter({ !$0.clear().isEmpty })
         if protected.linesCount > 0 {
             output.verbose("⚠️  \(protectedFiles.count) file(s) will be ignored")
         }
-        
+
         var allFilesAreSuitable = true
         for file in files {
             if protectedFiles.contains(file) {
@@ -72,11 +72,11 @@ struct HeaderVerifier {
                 allFilesAreSuitable = allFilesAreSuitable && isFileSuitable
             }
         }
-        
+
         return allFilesAreSuitable
-        
+
     }
-    
+
     /// Reads the content of the file at this path and look for the mention in its head.
     /// Considers the in-use file is written in Swift.
     /// The formalism is not important, will deal mainly with the textual content rather than
@@ -99,7 +99,7 @@ struct HeaderVerifier {
     /// the file to process is not suitable (false)
     ///
     private func look(at path: String, for mention: String, ignoring lines: Int) -> Bool {
-        
+
         // Read the current file
         guard let currentFileContent = try?
             String(contentsOf: URL(fileURLWithPath: path), encoding: .utf8) else {
@@ -113,7 +113,7 @@ struct HeaderVerifier {
                          to: .error)
             return false
         }
-        
+
         // Check if the line starts by /**, /* or //
         if !currentFileContent.matchStartCommentLine() {
             output.write("⚠️  It seems the Swift file at (\(path)) does not start with '/**' or '/*' or '//'. Will reject it.")
@@ -123,19 +123,19 @@ struct HeaderVerifier {
         // Reduce the file using ignored lines
         // FIXME Dirty!
         let topRecudedFileContent = currentFileContent.lines.suffix(from: lines).joined(separator: "\n")
-        
+
         // Keep just enough lines
         let bottomReducedFileContent = topRecudedFileContent.linesUntil(k: mention.linesCount + 2) // Keep ending line
-        
+
         // Compare line by line
         let splittedMention = mention.lines
         for i in 0..<mention.linesCount {
-            
+
             let currentFileLine = bottomReducedFileContent[i]
             let currentMentionLine = splittedMention[i]
-            
+
             var cleanedFileContentLine = "", cleanedMentionLine = ""
-            
+
             // Deal with case of final line with only //
             if currentFileLine.count > 0 && currentFileLine != currentMentionLine {
                 cleanedFileContentLine = currentFileLine.clear()
@@ -144,23 +144,23 @@ struct HeaderVerifier {
                 cleanedFileContentLine = currentFileLine
                 cleanedMentionLine = currentMentionLine
             }
-            
+
             if cleanedMentionLine != cleanedFileContentLine {
                 output.write("❌ The line \(i) did not match between the file \(path) and the header. Will reject it.")
                 output.write("\t - Here the line \(i) of the header: '\(currentMentionLine)'")
                 output.write("\t - Here the line \(i) of the current file: '\(currentFileLine)'")
                 return false
             }
-            
+
         }
-        
+
         // TODO: Deal with end by //
 //        if !(bottomReducedFileContent.last?.matchEndCommentLine())! {
 //            output.write("⚠️  It seems this Swift file (\(path)) has its header closed by another symbol than */ or //")
 //        }
-        
+
         return true
-        
+
     }
 
 }

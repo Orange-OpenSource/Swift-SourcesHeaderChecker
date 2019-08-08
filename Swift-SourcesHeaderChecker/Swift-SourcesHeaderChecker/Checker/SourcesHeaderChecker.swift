@@ -27,19 +27,19 @@ import Foundation
 /// contain the header.
 ///
 /// - Author: Pierre-Yves Lapersonne
-/// - Version: 2.0.0
+/// - Version: 2.0.1
 /// - Since: 01/07/2019
 ///
 struct SourcesHeaderChecker {
-    
-    // Mark: - Variables
-    
+
+    // MARK: - Variables
+
     /// The filter to use for the files to check
     private let ressourcesFilter: String
-    
-    
-    // Mark: - Cnostructor
-    
+
+
+    // MARK: - Cnostructor
+
     /// Initializes the regular expression to use so as to filter the files extensions
     /// and keep only these we want to check
     /// - Parameters:
@@ -48,10 +48,10 @@ struct SourcesHeaderChecker {
     init(_ filter: String) {
         ressourcesFilter = filter
     }
-    
-    
-    // Mark: - Methods
-    
+
+
+    // MARK: - Methods
+
     /// Looks recursively in the target folder for source files with extension, and check
     /// for these files if they have in their top the header with legal mentions.
     /// - Parameters:
@@ -65,17 +65,17 @@ struct SourcesHeaderChecker {
     ///
     func lookIn(folder target: String, for notice: String, ignoring lines: Int,
                 excluding files: String = "") -> Bool {
-        
+
         // Get files to verify
         // FIXME: May be quite heavy for too big projects
         let matchingRessources = FolderCrawler().crawlIn(folder: target, filtering: ressourcesFilter)
-        
+
         // Make the controls
         let areAllResourcesSuitable = HeaderVerifier()
             .look(at: matchingRessources, for: notice, ignoring: lines, excluding: files)
-        
+
         return areAllResourcesSuitable
-        
+
     }
-    
+
 }
